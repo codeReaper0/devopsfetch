@@ -1,0 +1,12 @@
+[Unit]
+Description=DevOpsFetch Monitoring Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/devopsfetch.py --monitor
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
