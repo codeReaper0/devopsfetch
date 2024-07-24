@@ -1,124 +1,170 @@
 # DevOpsFetch by CodeReaper
 
-DevOpsFetch is a tool designed for system information retrieval and monitoring. It can collect and display data such as active ports, Docker images and containers, Nginx domains, and user logins. It also includes a systemd service for continuous monitoring and logging.
+DevOpsFetch is a comprehensive command-line tool tailored for DevOps professionals to efficiently gather and display essential system information. It facilitates quick access to details about active ports, Docker containers, Nginx configurations, user logins, and system activities over specified time intervals.
 
 ## Features
 
-- **Ports:** Display all active ports and services.
-- **Docker:** List all Docker images and containers.
-- **Nginx:** Display all Nginx domains and their ports.
-- **Users:** List all users and their last login times.
-- **Time Range:** Display activities within a specified time range.
-- **Monitoring Mode:** Continuously monitor and log system activities.
-
-## Requirements
-
-- Ubuntu or Debian-based system
-- Python 3
-- Docker
-- Nginx
+- Display active ports and services
+- List Docker images and containers
+- Show Nginx domain configurations
+- View user login information
+- Monitor system activities within custom time ranges
+- Formatted output for easy readability
 
 ## Installation
 
-### Step 1: Download and Prepare the Scripts
+### Steps to Install
 
-Download the `devopsfetch.py` script, `devopsfetch.service` file, and `install.sh` script from the repository.
+1. Clone this repository:
 
-### Step 2: Run the Installation Script
+   ```sh
+   git clone https://github.com/codeReaper0/devopsfetch.git
+   cd devopsfetch
+   Make the installation script executable:
+   ```
 
-Run the `install.sh` script to install necessary dependencies, set up the Python script, and configure the systemd service.
+```sh
+chmod +x install.sh
+```
+
+Run the installation script with root privileges:
 
 ```sh
 sudo ./install.sh
 ```
 
-Verify the Installation
-Ensure the installation was successful by checking the status of the systemd service:
+### Running the Tool
+
+View help options:
 
 ```sh
-sudo systemctl status devopsfetch
+devopsfetch -h
 ```
 
 ### Usage
 
-You can use DevOpsFetch with various flags to retrieve specific information. The following sections describe each available option.
+Command Options
+-p, --port [PORT]: Display active ports or specific port information
+-d, --docker [NAME]: List Docker images/containers or specific container information
+-n, --nginx [DOMAIN]: Display Nginx domains or specific domain configuration
+-u, --users [USER]: List users and their last login times or specific user information
+-t, --time RANGE: Display activities within a time range (e.g., '1 hour ago')
+-h, --help: Display this help message
 
-### Display Active Ports
+### Examples
 
-To display all active ports and services:
+Display all active ports:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -p
+devopsfetch -p
 ```
 
-### List Docker Images
-
-- To list all Docker images:
+### Display information about a specific port:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -d images
+devopsfetch -p 80
 ```
 
-### List Docker Containers
-
--To list all Docker containers:
+### List all Docker containers:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -d containers
+devopsfetch -d
 ```
 
-### Display Nginx Domains and Ports
-
-- To display all Nginx domains and their ports:
+### Get detailed information about a specific Docker container:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -n
+devopsfetch -d container_name
 ```
 
-### List Users and Their Last Login Times
-
-- To list all users and their last login times:
+### Display all Nginx domains:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -u
+devopsfetch -n
 ```
 
-### Display Activities Within a Specified Time Range
-
-- To display activities within a specified time range, provide the start and end times:
+### Get Nginx configuration for a specific domain:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -t "2024-07-01 00:00:00" "2024-07-23 23:59:59"
+devopsfetch -n website.com
 ```
 
-### Monitoring Mode
-
-DevOpsFetch can also run in monitoring mode as a systemd service, which logs information periodically. This mode is set up and started automatically by the installation script.
-
-##Logs
-Logs are managed using logrotate and can be found at /var/log/devopsfetch.log. The log file is rotated daily, and up to 7 days of logs are kept. Logs are compressed after rotation.
-
-##Help
-To display the help message with usage instructions, run:
+### List all users and their last login times:
 
 ```sh
-python3 /usr/local/bin/devopsfetch.py -h
+devopsfetch -u
 ```
 
-### Uninstallation
-
-To stop and disable the DevOpsFetch service, and remove installed files, run:
+### Get last login information for a specific user:
 
 ```sh
-sudo systemctl stop devopsfetch
-sudo systemctl disable devopsfetch
-sudo rm /usr/local/bin/devopsfetch.py
+devopsfetch -u username
+```
+
+### Display activities within the last hour:
+
+```sh
+devopsfetch -t '6 hour ago'
+```
+
+### Date Range Queries
+
+DevOpsFetch supports time-based queries to show system activities within specific date ranges:
+
+### To show activities for a specific date:
+
+```sh
+devopsfetch --time '2024-07-24'
+```
+
+### To show activities within a date range:
+
+```sh
+devopsfetch --time '2024-07-24' '2024-07-25'
+```
+
+### Detailed Installation Process
+
+The install.sh script performs the following actions:
+
+### Updates the system package list.
+
+Installs necessary dependencies:
+nginx
+docker.io
+jq (for JSON parsing)
+Copies the main devopsfetch script to /usr/local/bin/, making it accessible system-wide.
+Sets the appropriate permissions to make the script executable.
+Creates a systemd service file (/etc/systemd/system/devopsfetch.service) to run the script periodically.
+Enables and starts the systemd service.
+Configures log rotation for the devopsfetch logs to manage log file sizes and retention.
+After running the installation script, devopsfetch will be installed as a system-wide command, and a background service will be set up to periodically collect and log system information.
+
+### ninstallation
+
+To uninstall devopsfetch:
+
+### Stop and disable the systemd service:
+
+```sh
+sudo systemctl stop devopsfetch.service
+sudo systemctl disable devopsfetch.service
+```
+
+### Remove the service file:
+
+```sh
 sudo rm /etc/systemd/system/devopsfetch.service
-sudo rm /etc/logrotate.d/devopsfetch
-sudo rm /var/log/devopsfetch.log
-sudo systemctl daemon-reload
 ```
 
-This will remove the DevOpsFetch service, its executable script, logrotate configuration, and log file.
+### Remove the main script:
 
-This README provides detailed instructions for installation, usage, and uninstallation of the DevOpsFetch tool. Ensure all commands are run with the necessary privileges, especially those requiring sudo.
+```sh
+sudo rm /usr/local/bin/devopsfetch
+```
+
+### Remove the log rotation configuration:
+
+```sh
+sudo rm /etc/logrotate.d/devopsfetch
+```

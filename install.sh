@@ -1,52 +1,49 @@
 #!/bin/bash
 
-# Check if script is run as root
+# Verify if the script is executed with root privileges
 if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root"
-  exit
+    echo "Please run as root"
+    exit 1
 fi
 
-LOG_FILE="/var/log/devopsfetch.log"
-
-# Install dependencies
+# Update package list and install required packages
 apt-get update
-apt-get install -y python3 python3-pip net-tools docker.io nginx
+apt-get install -y nginx docker.io jq
 
-# Install required Python packages
-pip3 install psutil tabulate
+# Deploy the main script to /usr/local/bin
+cp devopsfetch /usr/local/bin/
+chmod +x /usr/local/bin/devopsfetch
 
-# Copy Python script to /usr/local/bin
-cp devopsfetch.py /usr/local/bin/devopsfetch.py
-chmod +x /usr/local/bin/devopsfetch.py
+# Create systemd service for continuous monitoring
+cat << EOF > /etc/systemd/system/devopsfetch.service
+[Unit]
+Description=DevOpsFetch Service for System Monitoring
+After=network.target
 
-# Setup systemd service
-cp devopsfetch.service /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable devopsfetch
-systemctl start devopsfetch
+[Service]
+ExecStart=/usr/local/bin/devopsfetch -t '1 hour ago'
+Restart=always
+User=root
 
-# Create logrotate configuration
-tee /etc/logrotate.d/devopsfetch > /dev/null <<EOL
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and initiate the systemd service
+systemctl enable devopsfetch.service
+systemctl start devopsfetch.service
+
+# Configure log rotation for devopsfetch logs
+cat << EOF > /etc/logrotate.d/devopsfetch
 /var/log/devopsfetch.log {
     daily
     rotate 7
     compress
+    delaycompress
     missingok
     notifempty
-    create 644 root root
-    sharedscripts
-    postrotate
-        systemctl reload devopsfetch.service > /dev/null 2>/dev/null || true
-    endscript
-    su root root
+    create 0640 root root
 }
-EOL
+EOF
 
-# Ensure the log file exists and has the correct permissions
-touch "$LOG_FILE"
-chown root:root "$LOG_FILE"
-chmod 644 "$LOG_FILE"
-
-echo "Setup completed. DevOpsFetch service is now running and logs are managed."
-echo "You can now use it by running 'sudo /usr/local/bin/devopsfetch.py' followed by the appropriate flags."
-echo "The monitoring service has also been set up and started."
+echo "Installation complete!"
