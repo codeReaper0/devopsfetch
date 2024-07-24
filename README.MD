@@ -39,11 +39,11 @@ Ensure the installation was successful by checking the status of the systemd ser
 sudo systemctl status devopsfetch
 ```
 
-## Usage
+### Usage
 
 You can use DevOpsFetch with various flags to retrieve specific information. The following sections describe each available option.
 
-## Display Active Ports
+### Display Active Ports
 
 To display all active ports and services:
 
@@ -51,7 +51,7 @@ To display all active ports and services:
 python3 /usr/local/bin/devopsfetch.py -p
 ```
 
-## List Docker Images
+### List Docker Images
 
 - To list all Docker images:
 
@@ -59,7 +59,7 @@ python3 /usr/local/bin/devopsfetch.py -p
 python3 /usr/local/bin/devopsfetch.py -d images
 ```
 
-## List Docker Containers
+### List Docker Containers
 
 -To list all Docker containers:
 
@@ -91,7 +91,7 @@ python3 /usr/local/bin/devopsfetch.py -u
 python3 /usr/local/bin/devopsfetch.py -t "2024-07-01 00:00:00" "2024-07-23 23:59:59"
 ```
 
-## Monitoring Mode
+### Monitoring Mode
 
 DevOpsFetch can also run in monitoring mode as a systemd service, which logs information periodically. This mode is set up and started automatically by the installation script.
 
@@ -105,7 +105,7 @@ To display the help message with usage instructions, run:
 python3 /usr/local/bin/devopsfetch.py -h
 ```
 
-## Uninstallation
+### Uninstallation
 
 To stop and disable the DevOpsFetch service, and remove installed files, run:
 
