@@ -67,7 +67,7 @@ python3 /usr/local/bin/devopsfetch.py -d images
 python3 /usr/local/bin/devopsfetch.py -d containers
 ```
 
-##Display Nginx Domains and Ports
+### Display Nginx Domains and Ports
 
 - To display all Nginx domains and their ports:
 
@@ -75,7 +75,7 @@ python3 /usr/local/bin/devopsfetch.py -d containers
 python3 /usr/local/bin/devopsfetch.py -n
 ```
 
-##List Users and Their Last Login Times
+### List Users and Their Last Login Times
 
 - To list all users and their last login times:
 
@@ -83,7 +83,7 @@ python3 /usr/local/bin/devopsfetch.py -n
 python3 /usr/local/bin/devopsfetch.py -u
 ```
 
-##Display Activities Within a Specified Time Range
+### Display Activities Within a Specified Time Range
 
 - To display activities within a specified time range, provide the start and end times:
 
