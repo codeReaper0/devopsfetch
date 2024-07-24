@@ -20,8 +20,9 @@ DevOpsFetch is a comprehensive command-line tool tailored for DevOps professiona
    ```sh
    git clone https://github.com/codeReaper0/devopsfetch.git
    cd devopsfetch
-   Make the installation script executable:
    ```
+
+   Make the installation script executable:
 
 ```sh
 chmod +x install.sh
@@ -43,13 +44,14 @@ devopsfetch -h
 
 ### Usage
 
-Command Options
--p, --port [PORT]: Display active ports or specific port information
--d, --docker [NAME]: List Docker images/containers or specific container information
--n, --nginx [DOMAIN]: Display Nginx domains or specific domain configuration
--u, --users [USER]: List users and their last login times or specific user information
--t, --time RANGE: Display activities within a time range (e.g., '1 hour ago')
--h, --help: Display this help message
+### Command Options
+
+- -p, --port [PORT]: Display active ports or specific port information
+- -d, --docker [NAME]: List Docker images/containers or specific container information
+- -n, --nginx [DOMAIN]: Display Nginx domains or specific domain configuration
+- -u, --users [USER]: List users and their last login times or specific user information
+- -t, --time RANGE: Display activities within a time range (e.g., '1 hour ago')
+- -h, --help: Display this help message
 
 ### Examples
 
